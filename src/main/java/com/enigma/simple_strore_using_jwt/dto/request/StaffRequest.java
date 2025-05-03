@@ -1,0 +1,35 @@
+package com.enigma.simple_strore_using_jwt.dto.request;
+
+import com.enigma.simple_strore_using_jwt.entity.Transaction;
+import com.enigma.simple_strore_using_jwt.entity.User;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@Builder
+public class StaffRequest {
+    private String id;
+
+    @NotBlank(message = "username is required")
+    private String username;
+
+    @NotBlank(message = "email is required")
+    @Email(message = "invalid email format")
+    private String email;
+
+    @NotBlank(message = "password is required")
+    @Size(min = 6, message = "password must be at least 6 characters")
+    private String password;
+
+    private String position;
+}
