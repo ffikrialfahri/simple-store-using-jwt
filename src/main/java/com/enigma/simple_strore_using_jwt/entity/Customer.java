@@ -2,42 +2,54 @@ package com.enigma.simple_strore_using_jwt.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
-@Setter
 @Getter
-@ToString
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "m_customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
-    @Column(nullable = false)
-    private Date birthdate;
-    @Column(nullable = false)
+    @Column(name = "birthdate", nullable = false)
+    private LocalDate birthdate;
+    @Column(name = "birthplace", nullable = false)
     private String birthplace;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "address", columnDefinition = "TEXT")
     private String address;
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    private User user;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
+
+    @Column(name = "created_by", updatable = false)
     private String createdBy;
-    @Column(nullable = false)
+
+    @Column(name = "updated_by")
     private String updatedBy;
-    @LastModifiedDate
-    @Column(nullable = false)
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
